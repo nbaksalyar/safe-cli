@@ -13,7 +13,6 @@ use futures::future::Future;
 use log::{debug, info, warn};
 use rand::rngs::OsRng;
 use rand_core::RngCore;
-use routing::ClientError as RoutingClientError;
 use safe_app::{run, App, AppError::CoreError as SafeAppError};
 use safe_core::{
     client::test_create_balance, client::wallet_transfer_coins, CoreError as SafeCoreError,
@@ -27,9 +26,10 @@ use safe_app::test_utils::create_app;
 use safe_core::client::Client;
 use safe_nd::{
     AData, ADataAddress, ADataAppendOperation, ADataEntry, ADataIndex, ADataOwner,
-    ADataPubPermissionSet, ADataPubPermissions, ADataUser, AppendOnlyData, Coins, IDataAddress,
-    MDataAction, MDataPermissionSet, MDataSeqEntryActions, MDataSeqValue, PubImmutableData,
-    PubSeqAppendOnlyData, PublicKey as SafeNdPublicKey, SeqMutableData, XorName,
+    ADataPubPermissionSet, ADataPubPermissions, ADataUser, AppendOnlyData, Coins,
+    Error as SndError, IDataAddress, MDataAction, MDataPermissionSet, MDataSeqEntryActions,
+    MDataSeqValue, PubImmutableData, PubSeqAppendOnlyData, PublicKey as SafeNdPublicKey,
+    SeqMutableData, XorName,
 };
 
 pub use threshold_crypto::{PublicKey, SecretKey};
@@ -67,10 +67,7 @@ impl SafeAppScl {
                 .map_err(SafeAppError)
         })
         .map_err(|err| {
-            if let SafeAppError(SafeCoreError::RoutingClientError(
-                RoutingClientError::InvalidEntryActions(_),
-            )) = err
-            {
+            if let SafeAppError(SafeCoreError::DataError(SndError::InvalidEntryActions(_))) = err {
                 Error::EntryExists(format!("{}: {}", message, err))
             } else {
                 Error::NetDataError(format!("{}: {}", message, err))

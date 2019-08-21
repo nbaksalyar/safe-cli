@@ -16,7 +16,7 @@ log = "0.4.6"
 safe_app = "0.9.1"
 safe_core = "0.32.1"
 routing = { package = "mock_routing", git = "https://github.com/maidsafe/safe_client_libs", rev="ab4776d4" }
-safe-nd = "0.2.1"
+safe-nd = "0.3.0"
 structopt = "0.2.15"
 env_logger = "0.6.0"
 rand = "0.6.5"
@@ -46,8 +46,8 @@ fake-auth = ["safe_app/testing"]
 scl-mock = ["fake-auth"]
 
 [patch.crates-io]
-safe_app = { git = "https://github.com/maidsafe/safe_client_libs", rev = "ab4776d4" }
-safe_core = { git = "https://github.com/maidsafe/safe_client_libs", rev = "ab4776d4" }
+safe_app = { git = "https://github.com/maidsafe/safe_client_libs", branch = "experimental" }
+safe_core = { git = "https://github.com/maidsafe/safe_client_libs", branch = "experimental" }
 
 [dev-dependencies]
 pretty_assertions = "0.6.1"
